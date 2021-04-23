@@ -1,0 +1,45 @@
+{
+  "name": "fundi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "fastify start -l info app.js",
+    "dev": "SET DEBUG=knex:tx && SET FASTIFY_VERBOSE_WATCH=Y && fastify start -w --ignore-watch='data' -l debug -P app.js",
+    "db:migrate:make": "npx knex migrate:make",
+    "db:migrate:latest": "SET DEBUG=knex:tx && npx knex migrate:latest --knexfile ./knexfile.js",
+    "db:migrate:rollback": "SET DEBUG=knex:tx && npx knex migrate:rollback --knexfile ./knexfile.js",
+    "db:migrate:rollback:debug": "SET DEBUG=knex:tx && npx knex migrate:rollback --knexfile ./knexfile.js",
+    "db:seed:make": "SET DEBUG=knex:tx && npx knex seed:make --knexfile ./knexfile.js",
+    "db:seed:run": "SET DEBUG=knex:tx && npx knex seed:run --knexfile ./knexfile.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "date-fns": "^2.19.0",
+    "fastify": "^3.13.0",
+    "fastify-autoload": "^3.5.2",
+    "fastify-env": "^2.1.0",
+    "fastify-jwt": "^2.3.0",
+    "fastify-objectionjs": "^0.3.0",
+    "fastify-plugin": "^3.0.0",
+    "fastify-sensible": "^3.1.0",
+    "fastify-swagger": "^4.3.3",
+    "fluent-json-schema": "^2.0.4",
+    "glob": "^7.1.6",
+    "objection-password": "^3.0.0",
+    "rand-token": "^1.0.1",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "prettier": "^2.2.1"
+  }
+}
