@@ -1,21 +1,24 @@
-'use strict';
-
-const S = require('fluent-json-schema');
-const addDays = require('date-fns/addDays');
-const randtoken = require('rand-token');
-const { Model } = require('objection');
+import S from 'fluent-json-schema';
+import addDays from 'date-fns/addDays';
+import * as randtoken from 'rand-token';
+import { Model } from 'objection';
+import User from './User'
 
 class RefreshToken extends Model {
-  static get tableName() {
-    return 'refresh_tokens';
-  }
+  id!: number
+  user?: User
+  token?: string
+  expirationDate?: string
+  clientData?: object
+  isBlacklisted?: boolean
+  created_at?: string
+  updated_at?: string
 
-  static get idColumn() {
-    return 'id';
-  }
+  static tableName = 'refresh_tokens';
 
-  static get jsonSchema() {
-    return S.object()
+  static idColumn = 'id';
+
+  static jsonSchema = S.object()
       .prop('id', S.integer())
       .prop('userId', S.integer())
       .prop('token', S.string())
@@ -24,25 +27,20 @@ class RefreshToken extends Model {
         S.object()
           .prop('userAgent', S.string())
           .prop('remoteIp', S.string())
-          .valueOf()
       )
       .prop('isBlacklisted', S.boolean())
       .valueOf();
-  }
 
-  static get relationMappings() {
-    const User = require('./User');
-    return {
-      users: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: User,
-        join: {
-          from: 'refresh_tokens.user_id',
-          to: 'users.id',
-        },
+  static relationMappings = () => ({
+    users: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: User,
+      join: {
+        from: 'refresh_tokens.user_id',
+        to: 'users.id',
       },
-    };
-  }
+    },
+  })
 
   async $beforeInsert() {
     this.isBlacklisted = false;
@@ -57,4 +55,4 @@ class RefreshToken extends Model {
   }
 }
 
-module.exports = RefreshToken;
+export default RefreshToken;

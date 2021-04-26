@@ -1,5 +1,5 @@
 function users(table) {
-  table.increments();
+  table.increments('id');
   table.string('email', 128).notNullable().index().unique();
   table.string('password', 64).notNullable();
   table.timestamps(true, true);

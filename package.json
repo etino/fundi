@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:ts": "tsc",
+    "dev": "tsc && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"SET DEBUG=knex:tx && SET FASTIFY_VERBOSE_WATCH=Y && fastify start -w -l info -P dist/app.js\"",
+    "start": "npm run build:ts && fastify start -o -l info dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "fastify start -l info app.js",
-    "dev": "SET DEBUG=knex:tx && SET FASTIFY_VERBOSE_WATCH=Y && fastify start -w --ignore-watch='data' -l debug -P app.js",
     "db:migrate:make": "npx knex migrate:make",
     "db:migrate:latest": "SET DEBUG=knex:tx && npx knex migrate:latest --knexfile ./knexfile.js",
     "db:migrate:rollback": "SET DEBUG=knex:tx && npx knex migrate:rollback --knexfile ./knexfile.js",
@@ -34,12 +35,18 @@
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^3.0.1",
+    "@types/node": "^14.14.41",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "concurrently": "^6.0.2",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
+    "fastify-tsconfig": "^1.0.1",
     "prettier": "^2.2.1"
   }
 }

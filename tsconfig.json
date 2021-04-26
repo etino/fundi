@@ -1,0 +1,10 @@
+{
+  "extends": "fastify-tsconfig",
+  "resolveJsonModule": true,
+  "esModuleInterop": true,
+  "module": "commonjs",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"]
+}

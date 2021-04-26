@@ -1,8 +1,7 @@
-'use strict';
+import S from 'fluent-json-schema';
+import { FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify'
 
-const S = require('fluent-json-schema');
-
-module.exports = async function (app, opts) {
+const root: FastifyPluginAsync = async function (app, opts): Promise<void> {
   await app.register(require('./service'));
 
   const { httpErrors } = app;
@@ -13,7 +12,7 @@ module.exports = async function (app, opts) {
     handler: onTest,
   });
 
-  async function onTest(request, reply) {
+  async function onTest(request: FastifyRequest, reply: FastifyReply) {
     const user = await app.userService.getUserByEmail('guest@test.com');
     return { message: 'Test - OK', user };
   }
@@ -37,8 +36,8 @@ module.exports = async function (app, opts) {
     handler: onSignup,
   });
 
-  async function onSignup(request, reply) {
-    const { email, password } = request.body;
+  async function onSignup(request: FastifyRequest, reply: FastifyReply) {
+    const { email, password } = request.body as {email: string, password: string};
 
     const user = await app.userService.getUserByEmail(email);
     if (user) {
@@ -54,9 +53,9 @@ module.exports = async function (app, opts) {
     method: 'POST',
     url: '/login',
     schema: {
-      description: 'Login',
-      summary: 'User Login',
-      tags: ['User'],
+      // description: 'Login',
+      // summary: 'User Login',
+      // tags: ['User'],
       body: S.object()
         .prop('email', S.string().required())
         .prop('password', S.string().required())
@@ -69,8 +68,8 @@ module.exports = async function (app, opts) {
         401: S.object().prop('message', S.string()),
       },
     },
-    handler: async function onLogin(request, reply) {
-      const { email, password } = request.body;
+    handler: async function onLogin(request: FastifyRequest, reply: FastifyReply) {
+      const { email, password } = request.body as {email: string, password: string};
 
       const user = await app.userService.getUserByEmailWithRoles(email);
       if (!user) {
@@ -117,10 +116,10 @@ module.exports = async function (app, opts) {
       },
       security: [{ ApiKey: [] }],
     },
-    handler: async function onRefresh(request, reply) {
-      const { refreshToken } = request.body;
+    handler: async function onRefresh(request: FastifyRequest, reply: FastifyReply) {
+      const { refreshToken } = request.body as {refreshToken: string};
 
-      const { id, roles } = request.user;
+      const { id, roles } = request.user as {id: number, roles: object};
       const checkRefreshToken = await app.userService.checkRefreshToken(
         id,
         refreshToken
@@ -152,10 +151,10 @@ module.exports = async function (app, opts) {
       },
       security: [{ ApiKey: [] }],
     },
-    handler: async function onLogout(request, reply) {
-      const { refreshToken } = request.body;
+    handler: async function onLogout(request: FastifyRequest, reply: FastifyReply) {
+      const { refreshToken } = request.body as {refreshToken: string};
 
-      const { id } = request.user;
+      const { id } = request.user as {id: number};
       const checkRefreshToken = await app.userService.checkRefreshToken(
         id,
         refreshToken
@@ -174,3 +173,6 @@ module.exports = async function (app, opts) {
     },
   });
 };
+
+
+export default root;

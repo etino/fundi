@@ -4,7 +4,7 @@
 require('dotenv').config();
 
 // Require the framework
-const Fastify = require('fastify');
+import Fastify from 'fastify';
 
 // Instantiate Fastify with some config
 const app = Fastify({
