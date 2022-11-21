@@ -19,7 +19,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "date-fns": "^2.19.0",
-    "fastify": "^3.13.0",
+    "fastify": "^3.29.4",
     "fastify-autoload": "^3.5.2",
     "fastify-env": "^2.1.0",
     "fastify-jwt": "^2.3.0",
